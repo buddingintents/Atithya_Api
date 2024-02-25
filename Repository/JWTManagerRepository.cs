@@ -22,13 +22,13 @@ namespace Atithya_Api.Repository
             var tokenRequestKey = iconfiguration["TokenRequestKey"];
             var dateTimeSequence = DateTime.Now.ToString("ddMMyyyy");
 
-            var tokenAuthKey = new EncryptionHelper().EncryptPayload(tokenRequestKey + dateTimeSequence);
+            var tokenAuthKey = new EncryptionHelper(iconfiguration.GetValue<string>("ENC:Key"), iconfiguration.GetValue<string>("ENC:IV")).EncryptData(tokenRequestKey + dateTimeSequence);
             if (tokenAuthKey != data.TokenRequestKey)
                 return null;
 
             // Else we generate JSON Web Token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.UTF8.GetBytes(iconfiguration["JWT:Key"]);
+            var tokenKey = Encoding.UTF8.GetBytes(iconfiguration.GetValue<string>("JWT:Key"));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Authentication, data.TokenRequestKey) }),
