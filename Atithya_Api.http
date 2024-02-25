@@ -1,0 +1,6 @@
+@Atithya_Api_HostAddress = http://localhost:5195
+
+GET {{Atithya_Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
