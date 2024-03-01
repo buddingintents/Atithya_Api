@@ -7,23 +7,18 @@ using System.Text;
 
 namespace Atithya_Api.Repository
 {
-    public class JWTManagerRepository : IJWTManagerRepository
+    public class JWTManagerRepository(IConfiguration iconfiguration) : IJWTManagerRepository
     {
-        private readonly IConfiguration iconfiguration;
-        public JWTManagerRepository(IConfiguration iconfiguration)
+        public Tokens Authenticate(string data)
         {
-            this.iconfiguration = iconfiguration;
-        }
-        public Tokens Authenticate(TokenAuthenticaton data)
-        {
-            if (data.TokenRequestKey is null)
+            if (data is null)
                 return null;
 
             var tokenRequestKey = iconfiguration["TokenRequestKey"];
             var dateTimeSequence = DateTime.Now.ToString("ddMMyyyy");
 
-            var tokenAuthKey = new EncryptionHelper(iconfiguration.GetValue<string>("ENC:Key"), iconfiguration.GetValue<string>("ENC:IV")).EncryptData(tokenRequestKey + dateTimeSequence);
-            if (tokenAuthKey != data.TokenRequestKey)
+            var tokenAuthKey = new EncryptionHelper(iconfiguration).EncryptData(tokenRequestKey + dateTimeSequence);
+            if (tokenAuthKey != data)
                 return null;
 
             // Else we generate JSON Web Token
@@ -31,7 +26,7 @@ namespace Atithya_Api.Repository
             var tokenKey = Encoding.UTF8.GetBytes(iconfiguration.GetValue<string>("JWT:Key"));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Authentication, data.TokenRequestKey) }),
+                Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Authentication, data) }),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };

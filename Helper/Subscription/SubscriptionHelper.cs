@@ -9,15 +9,11 @@ using System.Globalization;
 
 namespace Atithya_Api.Helper.Subscription
 {
-    public class SubscriptionHelper
+    public class SubscriptionHelper(IConfiguration configuration)
     {
-        IConfiguration _configuration;
-        private readonly EncryptionHelper EncryptionHelper;
-        public SubscriptionHelper(IConfiguration configuration)
-        {
-            _configuration = configuration;
-            EncryptionHelper = new(_configuration.GetValue<string>("ENC:Key"), _configuration.GetValue<string>("ENC:Key"));
-        }
+        IConfiguration _configuration = configuration;
+        private readonly EncryptionHelper EncryptionHelper = new(configuration);
+
         public APIResponse GetSubscriptionData(APIRequest data)
         {
             APIResponse response;
@@ -42,6 +38,11 @@ namespace Atithya_Api.Helper.Subscription
                     //};
 
                     var rs = new ResultSet<DataTable>();
+
+                    rs.DtResults.Columns.Add("Name");
+                    DataRow dr = rs.DtResults.NewRow();
+                    dr["Name"] = "Ankit Sharma";
+                    rs.DtResults.AcceptChanges();
                     //if (Convert.ToDateTime(DateTime.ParseExact(aTMLogs_Request.StartDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)) < DateTime.Now.Date)
                     //    rs = new GenericDAL<DataTable>().ExecuteProcedure(Available_DbSchema.ATMWEB_APP, paramDef, "ia_ATM_TXN_LOGS_TMP");
                     //else

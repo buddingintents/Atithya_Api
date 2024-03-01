@@ -4,6 +4,6 @@ namespace Atithya_Api.Repository
 {
     public interface IJWTManagerRepository
     {
-        Tokens Authenticate(TokenAuthenticaton data);
+        Tokens Authenticate(string data);
     }
 }

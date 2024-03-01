@@ -3,12 +3,10 @@ using System.Text;
 
 namespace Atithya_Api.Utilities
 {
-    public class EncryptionHelper(string key, string iv)
+    public class EncryptionHelper(IConfiguration configuration)
     {
-        string key = key;
-        string iv = iv;
-        byte[] keyData = Encoding.UTF8.GetBytes(key);
-        byte[] ivData = Encoding.UTF8.GetBytes(iv);
+        byte[] keyData = Encoding.UTF8.GetBytes(configuration["ENC:Key"]);
+        byte[] ivData = Encoding.UTF8.GetBytes(configuration["ENC:IV"]);
 
         //byte[] encPassPhrase = Encoding.UTF8.GetBytes(System.Configuration.ConfigurationManager.AppSettings["passPhrase"]);
         //byte[] enciv = Encoding.UTF8.GetBytes(System.Configuration.ConfigurationManager.AppSettings["enciv"]);

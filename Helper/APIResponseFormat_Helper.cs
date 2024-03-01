@@ -8,12 +8,10 @@ namespace Atithya_Api.Helper
 {
     public class APIResponseFormat_Helper
     {
-        private IConfiguration _configuration;
         EncryptionHelper _encryptionHelper;
         public APIResponseFormat_Helper(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _encryptionHelper = new EncryptionHelper(_configuration.GetValue<string>("ENC:Key"), _configuration.GetValue<string>("ENC:IV"));
+            _encryptionHelper = new EncryptionHelper(configuration);
         }
         public string RetrieveRequestBody(APIRequest data)
         {

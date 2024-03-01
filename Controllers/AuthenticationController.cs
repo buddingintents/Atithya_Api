@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Atithya_Api.Controllers
 {
-    public class AuthenticationController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthenticationController : ControllerBase
     {
         private readonly IJWTManagerRepository _jWTManager;
         private readonly ILogger<AuthenticationController> _logger;
@@ -21,7 +23,7 @@ namespace Atithya_Api.Controllers
         [Route("[action]")]
         public IActionResult GetToken(TokenAuthenticaton data)
         {
-            var token = _jWTManager.Authenticate(data);
+            var token = _jWTManager.Authenticate(data.TokenRequestKey);
 
             _logger.LogDebug(token != null ? token.Token : "No Token Generated");
             if (token == null)

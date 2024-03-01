@@ -12,7 +12,6 @@ namespace Atithya_Api.Controllers
     public class SubscriptionController(ILogger<SubscriptionController> logger, IConfiguration configuration) : ControllerBase
     {
         private readonly ILogger<SubscriptionController> _logger = logger;
-        private readonly IConfiguration _configuration = configuration;
 
         [HttpPost]
         [Route("[action]")]
